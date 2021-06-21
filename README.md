@@ -6,7 +6,7 @@ A scrum planning application.
 
 - packages
   - client (React)
-  - server (Deno)
+  - server (Express)
 
 ## How to Start application
 
