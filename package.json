@@ -1,0 +1,11 @@
+{
+  "name": "scrum-game",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {},
+  "scripts": {
+    "server": "cd ./packages/server && yarn start",
+    "client": "cd ./packages/client && yarn start"
+  },
+  "devDependencies": {}
+}
