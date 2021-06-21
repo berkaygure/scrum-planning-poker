@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "packages/client"
+    },
+    {
+      "path": "packages/server"
+    },
+    {
+      "name": "root",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  }
+}
