@@ -1,48 +1,40 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Flex,
-  Heading,
-  Button,
-  Avatar,
-  Text,
-  AvatarBadge,
-  IconButton,
-  Stack,
-} from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { BiImport } from "react-icons/bi";
+import React, { useEffect, useState } from 'react';
+import { Box, Flex, Heading, Button, useDisclosure } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 
-import { ColorModeSwitcher } from "../../components/ColorModeSwitcher";
-import { findRoom } from "../../services/room";
-import socketIOClient, { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io-client/build/typed-events";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { ColorModeSwitcher } from '../../components/ColorModeSwitcher';
+import { findRoom } from '../../services/room';
+import socketIOClient, { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import NewTask from './NewTask';
+import AttendeeList from './components/AttendeeList';
+import TaskList from './components/TaskList';
 
 const Room = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { id } = useParams<{ id: string }>();
   const [room, setRoom] = useState<Room>();
   const { user } = useLocalStorage();
-  const [onlineUsers, setOnlineUsers] = useState<
-    { room: string; userId: string; id: string }[]
-  >([]);
+  const [onlineUsers, setOnlineUsers] = useState<{ room: string; userId: string; id: string }[]>(
+    [],
+  );
   const ws = React.useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
 
   React.useEffect(() => {
-    ws.current = socketIOClient("http://localhost:8080");
+    ws.current = socketIOClient('http://localhost:8080');
   }, []);
 
   React.useEffect(() => {
     if (ws.current) {
-      ws.current.on("onlineUsers", function (data) {
+      ws.current.on('onlineUsers', function (data) {
         setOnlineUsers(data.users);
       });
     }
   }, [ws]);
 
   useEffect(() => {
-    ws.current?.emit("joinRoom", { room: room?._id, userId: user?.id });
+    ws.current?.emit('joinRoom', { room: room?._id, userId: user?.id });
   }, [room, user]);
 
   useEffect(() => {
@@ -52,95 +44,66 @@ const Room = () => {
     })();
   }, [id]);
 
-  const isOnline = (userId: string) => {
-    return onlineUsers.findIndex((x) => x.userId === userId) > -1;
+  const onNewTaskAdded = (tasks: Task[]) => {
+    setRoom({
+      ...room!,
+      tasks,
+    });
+    onClose();
   };
 
   return (
-    <Box h="100vh">
-      <ColorModeSwitcher right="5" position="fixed" top="3" />
-      <Flex mx="auto" w="1200px" h="100vh">
-        <Box flex="1" mt="10">
-          <Heading borderBottom="1px" borderColor="gray.600" pb="3">
+    <Box h='100vh'>
+      <ColorModeSwitcher right='5' position='fixed' top='3' />
+      <Flex mx='auto' p='10' h='full'>
+        <Box flex='1'>
+          <Heading borderBottom='1px' borderColor='gray.600' pb='3'>
             #{room?.name}
           </Heading>
-          <Box py="3">
+          <Box py='3'>
             {room && room.owner._id === user?.id && (
-              <Button w="full" colorScheme="blue">
+              <Button w='full' colorScheme='blue'>
                 Start
               </Button>
             )}
             {room && room.users.findIndex((x) => x._id === user?.id) === -1 && (
-              <Button w="full" mt="2">
+              <Button w='full' mt='2'>
                 Join
               </Button>
             )}
           </Box>
-          <Box py="3">
-            <Heading
-              borderBottom="1px"
-              fontSize="2xl"
-              pb="3"
-              borderColor="gray.600"
-            >
-              Attendees
-            </Heading>
-          </Box>
-          <Box>
-            {room?.users.map((e) => (
-              <Flex key={e._id} mb="3" alignItems="center">
-                <Avatar name={e.name} mr="5">
-                  <AvatarBadge
-                    boxSize="1.25em"
-                    bg={isOnline(e._id) ? "green.500" : "gray.300"}
-                  />
-                </Avatar>
-                <Text fontSize="lg">{e.name}</Text>
-              </Flex>
-            ))}
-          </Box>
-          <Box py="3">
-            <Flex
-              borderBottom="1px"
-              pb="3"
-              justifyContent="space-between"
-              alignItems="center"
-              borderColor="gray.600"
-            >
-              <Heading fontSize="2xl">Tasks</Heading>
-              <Stack direction="row">
-                <IconButton
-                  rounded="md"
-                  aria-label="Add Task"
-                  icon={<IoIosAddCircleOutline />}
-                />
-                <IconButton
-                  rounded="md"
-                  aria-label="Add Task"
-                  icon={<BiImport />}
-                />
-              </Stack>
-            </Flex>
-          </Box>
+          {room && <AttendeeList attendees={room.users} onlineUsers={onlineUsers} />}
+          {room && <TaskList tasks={room.tasks} onOpen={onOpen} />}
         </Box>
         <Box
-          flex="2"
-          mt="10"
-          h="95vh"
-          borderLeft="1px"
-          borderRight="1px"
-          borderColor="gray.600"
-          ml="5"
-          px="4"
+          flex='3'
+          h='full'
+          borderLeft='1px'
+          borderRight='1px'
+          borderColor='gray.600'
+          ml='5'
+          px='4'
         >
           <Heading>Current Task</Heading>
           <Box>
-              <Button>
-                    10
-              </Button>
+            <Button>10</Button>
           </Box>
         </Box>
+        <Box flex='1' ml='5'>
+          <Heading borderBottom='1px' borderColor='gray.600' pb='3'>
+            Score Table
+          </Heading>
+        </Box>
       </Flex>
+      {room && (
+        <NewTask
+          roomId={room?._id}
+          onFinish={onNewTaskAdded}
+          size='lg'
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </Box>
   );
 };

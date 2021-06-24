@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var mongoDB = 'mongodb://127.0.0.1/scrumpoker';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 var db = mongoose.connection;
 

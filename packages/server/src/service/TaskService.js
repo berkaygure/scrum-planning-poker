@@ -1,20 +1,14 @@
-const Room = require("../models/Room");
-const RoomService = require("../RoomService");
-const mongoose = require("mongoose");
-
 class TaskService {
-    constructor() {
-      this.findAll = this.findAll.bind(this);
-      this.roomService = new RoomService();
-    }
+  constructor() {
+    this.createTask = this.createTask.bind(this);
+  }
 
-    async createTask(name, roomId) {
-        const room = await this.roomService.findById(roomId);
-        room.tasks.push({
-            name
-            
-        })
-    }
+  async createTask(task, room) {
+    room.tasks.push(task);
+    const x = await room.save();
+    console.log(x);
+    return room.tasks;
+  }
 }
 
 module.exports = TaskService;

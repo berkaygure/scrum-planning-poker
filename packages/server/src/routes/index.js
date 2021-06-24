@@ -1,15 +1,11 @@
-"use strict";
-const router = require("express").Router();
-const AuthController = require("../controllers/AuthController");
-const RoomController = require("../controllers/RoomController");
-const authVerify = require("../middleware/authVerify");
+'use strict';
+const router = require('express').Router();
+const AuthController = require('../controllers/AuthController');
+const RoomController = require('../controllers/RoomController');
+const TaskController = require('../controllers/TaskController');
+const authVerify = require('../middleware/authVerify');
 
-const {
-  URL_LOGIN,
-  URL_GET_USER_BY_ID,
-  URL_REGISTER,
-  URL_ROOMS,
-} = require("../url");
+const { URL_LOGIN, URL_GET_USER_BY_ID, URL_REGISTER, URL_ROOMS } = require('../url');
 
 // Auth routes
 router.post(URL_LOGIN, AuthController.login);
@@ -24,5 +20,9 @@ router.delete(`${URL_ROOMS}/:id`, [authVerify], RoomController.remove);
 router.get(`${URL_ROOMS}/:id`, [authVerify], RoomController.find);
 router.post(`${URL_ROOMS}/:id/join`, [authVerify], RoomController.joinChannel);
 router.delete(`${URL_ROOMS}/:id/leave`, [authVerify], RoomController.leaveChannel);
+
+// Task routes
+router.get(`${URL_ROOMS}/:id/tasks`, [authVerify], TaskController.findAll);
+router.post(`${URL_ROOMS}/:id/tasks`, [authVerify], TaskController.createTask);
 
 module.exports = router;
