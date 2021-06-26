@@ -1,42 +1,41 @@
-const User = require("../models/User");
-const EntityAlreadyExists = require("../exceptions/EntityAlreadyExists");
+const User = require('../models/User');
 
 class AuthService {
-    constructor() {
-        this.register = this.register.bind(this);
-        this.findById = this.findById.bind(this);
-        this.findByName = this.findByName.bind(this);
-    }
-    async register(name, password) {
-        const isExists = await this.findByName(name);
-        if(isExists) {
-            throw new EntityAlreadyExists();
-        }
-        const user = new User({ name, password });
-        return user.save();
-    }    
-    
-    async login(name ,pwd) {
-        const user = await this.findByName(name);
-        if(user) {
-            const isMatched = await user.comparePassword(pwd);
-            console.log(isMatched);
-            if(isMatched) {
-                return user;
-            }
-            return false;
-        }
+  constructor() {
+    this.register = this.register.bind(this);
+    this.findById = this.findById.bind(this);
+    this.findByName = this.findByName.bind(this);
+  }
 
-        return false;
+  async register(username, password) {
+    const isExists = await this.findByName(username);
+    if (isExists) {
+      throw new Error('Entity Already Exists');
+    }
+    const user = new User({ username, password });
+    return user.save();
+  }
+
+  async login(username, pwd) {
+    const user = await this.findByName(username);
+    if (user) {
+      const isMatched = await user.comparePassword(pwd);
+      if (isMatched) {
+        return user;
+      }
+      return false;
     }
 
-    async findById(id) {
-        return await User.findById(id).exec();
-    }
+    return false;
+  }
 
-    async findByName(name) {
-        return await User.findOne({name}).exec();
-    }
+  async findById(id) {
+    return await User.findById(id).exec();
+  }
+
+  async findByName(username) {
+    return await User.findOne({ username }).exec();
+  }
 }
 
 module.exports = AuthService;

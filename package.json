@@ -2,10 +2,16 @@
   "name": "scrum-game",
   "version": "1.0.0",
   "license": "MIT",
-  "dependencies": {},
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "server": "cd ./packages/server && yarn start",
-    "client": "cd ./packages/client && yarn start"
+    "test": "lerna run test",
+    "new-version": "lerna version --conventional-commits --yes",
+    "diff": "lerna diff"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
 }

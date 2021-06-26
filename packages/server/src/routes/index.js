@@ -1,15 +1,26 @@
 'use strict';
+const { body } = require('express-validator');
+const { URL_LOGIN, URL_GET_USER_BY_ID, URL_REGISTER, URL_ROOMS } = require('@scrum-game/common');
 const router = require('express').Router();
 const AuthController = require('../controllers/AuthController');
 const RoomController = require('../controllers/RoomController');
 const TaskController = require('../controllers/TaskController');
 const authVerify = require('../middleware/authVerify');
-
-const { URL_LOGIN, URL_GET_USER_BY_ID, URL_REGISTER, URL_ROOMS } = require('../url');
+const validate = require('../middleware/validate');
 
 // Auth routes
-router.post(URL_LOGIN, AuthController.login);
-router.post(URL_REGISTER, AuthController.register);
+router.post(
+  URL_LOGIN,
+  [body('username').exists().isLength({ min: 3 }), body('password').exists().isLength({ min: 6 })],
+  validate,
+  AuthController.login,
+);
+router.post(
+  URL_REGISTER,
+  [body('username').exists().isLength({ min: 3 }), body('password').exists().isLength({ min: 6 })],
+  validate,
+  AuthController.register,
+);
 router.get(URL_GET_USER_BY_ID, AuthController.me);
 
 // Room Routes

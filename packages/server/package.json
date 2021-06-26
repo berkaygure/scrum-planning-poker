@@ -1,21 +1,29 @@
 {
-  "name": "server",
+  "name": "@scrum-game/server",
   "version": "1.0.0",
   "main": "src/server.js",
   "license": "MIT",
   "dependencies": {
+    "@scrum-game/common": "1.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.14",
     "socket.io": "^4.1.2"
   },
   "scripts": {
-    "start": "nodemon ./src/server.js"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js",
+    "test": "NODE_ENV=test mocha --require ./src/test/global.js ./src/test --recursive"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "dotenv": "^10.0.0",
+    "mocha": "^9.0.1",
     "nodemon": "^2.0.7"
   }
 }
