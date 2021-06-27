@@ -38,6 +38,18 @@ router.delete(`${URL_ROOMS}/:id/leave`, [authVerify], RoomController.leaveChanne
 
 // Task routes
 router.get(`${URL_ROOMS}/:id/tasks`, [authVerify], TaskController.findAll);
-router.post(`${URL_ROOMS}/:id/tasks`, [authVerify], TaskController.createTask);
+router.post(
+  `${URL_ROOMS}/:id/tasks`,
+  [authVerify, body('name').exists().isLength({ min: 3 })],
+  validate,
+  TaskController.createTask,
+);
+router.put(
+  `${URL_ROOMS}/:id/tasks/:taskId`,
+  [authVerify, body('name').exists().isLength({ min: 3 })],
+  validate,
+  TaskController.updateTask,
+);
+router.delete(`${URL_ROOMS}/:id/tasks/:taskId`, [authVerify], TaskController.deleteTask);
 
 module.exports = router;
