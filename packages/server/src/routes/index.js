@@ -26,7 +26,12 @@ router.get(URL_GET_USER_BY_ID, AuthController.me);
 // Room Routes
 router.get(`${URL_ROOMS}/:id`, [authVerify], RoomController.find);
 router.get(URL_ROOMS, [authVerify], RoomController.findAll);
-router.post(URL_ROOMS, [authVerify], RoomController.create);
+router.post(
+  URL_ROOMS,
+  [authVerify, body('name').exists().isLength({ min: 3 })],
+  validate,
+  RoomController.create,
+);
 router.delete(`${URL_ROOMS}/:id`, [authVerify], RoomController.remove);
 router.post(`${URL_ROOMS}/:id/join`, [authVerify], RoomController.joinChannel);
 router.delete(`${URL_ROOMS}/:id/leave`, [authVerify], RoomController.leaveChannel);

@@ -153,6 +153,24 @@ describe('Rooms', function () {
         });
     });
 
+    it('SHOULD NOT CREATE A ROOM WITH NAME LENGTH LESS THAN 3', function (done) {
+      const room = { name: 'Ne' };
+
+      chai
+        .request(app)
+        .post(URL_ROOMS)
+        .send(room)
+        .set('x-access-token', token)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.deep.nested.property('errors[0].name');
+          Room.countDocuments({}, function (err, c) {
+            c.should.be.equal(0);
+            done();
+          });
+        });
+    });
+
     it('SHOULD NOT REMOVE A ROOM IF THERE IS NO OWNERSHIP', function (done) {
       const room = new Room({ name: 'My Room' });
 
