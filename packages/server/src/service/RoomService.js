@@ -1,5 +1,5 @@
-const Room = require("../models/Room");
-const mongoose = require("mongoose");
+const Room = require('../models/Room');
+const mongoose = require('mongoose');
 
 class RoomService {
   constructor() {
@@ -7,22 +7,20 @@ class RoomService {
   }
   async findAll() {
     return await Room.find({})
-      .populate("owner", "name")
-      .populate("users", "name")
-      .sort("-createdAt");
+      .populate('owner', 'name')
+      .populate('users', 'name')
+      .sort('-createdAt');
   }
 
   async findById(roomId) {
-    const room = await Room.findById(roomId)
-      .populate("owner", "name")
-      .populate("users", "name");
+    const room = await Room.findById(roomId).populate('owner', 'name').populate('users', 'name');
     return room;
   }
 
   async joinToChannel(roomId, userId) {
     const room = await Room.findById(roomId);
     if (!room) {
-      throw new Error("Room could not be found");
+      throw new Error('Room could not be found');
     }
 
     if (!room.users.includes(userId)) {
@@ -36,9 +34,9 @@ class RoomService {
   async leaveChannel(roomId, userId) {
     const room = await Room.findById(roomId);
     if (!room) {
-      throw new Error("Room could not be found");
+      throw new Error('Room could not be found');
     }
-    const index = room.users.findIndex(x => x == userId)
+    const index = room.users.findIndex((x) => x == userId);
     if (index > -1) {
       room.users.splice(index, 1);
     }
@@ -59,10 +57,12 @@ class RoomService {
   }
 
   async remove(roomId, ownerId) {
-    await Room.deleteOne({
+    const deleted = await Room.deleteOne({
       owner: mongoose.Types.ObjectId(ownerId),
       _id: mongoose.Types.ObjectId(roomId),
     });
+
+    return deleted.deletedCount > 0;
   }
 }
 

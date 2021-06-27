@@ -4,7 +4,7 @@ module.exports = function (app, mongoose, express) {
   // DB
   let dbUrl = process.env.DB_HOST;
   if (process.env.NODE_ENV !== 'production') {
-    dbUrl = process.env.DB_HOST_TEST;
+    dbUrl = 'mongodb://127.0.0.1/scrumpoker_test';
   }
 
   mongoose.connect(dbUrl, {
