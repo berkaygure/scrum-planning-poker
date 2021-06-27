@@ -1,23 +1,24 @@
-import { ColorModeScript } from "@chakra-ui/react";
-import * as React from "react";
-import ReactDOM from "react-dom";
-import { App } from "./App";
-import reportWebVitals from "./reportWebVitals";
-import * as serviceWorker from "./serviceWorker";
-import axios from "axios";
+import { ColorModeScript } from '@chakra-ui/react';
+import * as React from 'react';
+import ReactDOM from 'react-dom';
+import { App } from './App';
+import reportWebVitals from './reportWebVitals';
+import * as serviceWorker from './serviceWorker';
+import axios from 'axios';
 
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 axios.interceptors.request.use(
   function (req) {
-    if(localStorage.session) {
+    if (localStorage.session) {
       const token = (JSON.parse(atob(localStorage.session)) as User).token;
-      req.headers["x-access-token"] = token;
+      req.headers['authorization'] = `bearer ${token}`;
     }
 
     return req;
   },
   function (error) {
     return Promise.reject(error);
-  }
+  },
 );
 
 ReactDOM.render(
@@ -25,7 +26,7 @@ ReactDOM.render(
     <ColorModeScript />
     <App />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

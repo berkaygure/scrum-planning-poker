@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -12,6 +13,7 @@ const swaggerDocument = require('./swagger.json');
 require('./config/index.js')(app, mongoose, express);
 
 // Register routes
+app.use(cors());
 app.use(routes);
 app.use(errorHandler);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

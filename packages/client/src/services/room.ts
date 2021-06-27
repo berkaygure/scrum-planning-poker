@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { URL_ROOMS } from '../config/url';
+import { URL_ROOMS } from '@scrum-game/common';
 
 export const findAllRooms = () => {
   return axios.get<Room[]>(URL_ROOMS);

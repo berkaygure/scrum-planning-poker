@@ -1,5 +1,5 @@
 'use strict';
-const { body } = require('express-validator');
+const { body, check } = require('express-validator');
 const { URL_LOGIN, URL_GET_USER_BY_ID, URL_REGISTER, URL_ROOMS } = require('@scrum-game/common');
 const router = require('express').Router();
 const AuthController = require('../controllers/AuthController');
@@ -9,18 +9,22 @@ const authVerify = require('../middleware/authVerify');
 const validate = require('../middleware/validate');
 
 // Auth routes
-router.post(
-  URL_LOGIN,
-  [body('username').exists().isLength({ min: 3 }), body('password').exists().isLength({ min: 6 })],
-  validate,
-  AuthController.login,
-);
-router.post(
-  URL_REGISTER,
-  [body('username').exists().isLength({ min: 3 }), body('password').exists().isLength({ min: 6 })],
-  validate,
-  AuthController.register,
-);
+
+const authValidationRules = [
+  body('username')
+    .exists()
+    .withMessage('The username is required')
+    .isLength({ min: 3 })
+    .withMessage('Your username must be at least 3 characters'),
+  body('password')
+    .exists()
+    .withMessage('The password is required')
+    .isLength({ min: 6 })
+    .withMessage('Your password must be at least 6 characters'),
+];
+
+router.post(URL_LOGIN, authValidationRules, validate, AuthController.login);
+router.post(URL_REGISTER, authValidationRules, validate, AuthController.register);
 router.get(URL_GET_USER_BY_ID, AuthController.me);
 
 // Room Routes
