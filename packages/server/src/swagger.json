@@ -15,8 +15,21 @@
     {
       "name": "Authentication",
       "description": "API for auth"
+    },
+    {
+      "name": "Rooms",
+      "description": "API for Rooms"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
   "schemes": ["http"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
@@ -45,6 +58,26 @@
           }
         }
       }
+    },
+
+    "/api/rooms": {
+      "get": {
+        "tags": ["Rooms"],
+        "description": "Get All Rooms",
+        "parameters": [],
+        "produces": ["application/json"],
+        "security": {
+          "bearerAuth": []
+        },
+        "responses": {
+          "200": {
+            "description": "Rooms",
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -58,6 +91,18 @@
           "type": "string"
         }
       }
+    },
+    "Room": {
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Rooms": {
+      "type": "array",
+      "$ref": "#/definitions/Room"
     }
   }
 }
