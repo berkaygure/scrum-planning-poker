@@ -19,7 +19,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .get(URL_ROOMS)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -30,7 +30,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .get(`${URL_ROOMS}/1`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -41,7 +41,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/1`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -52,7 +52,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .post(`${URL_ROOMS}`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .send({ name: 'demo ' })
         .end((err, res) => {
           res.should.have.status(401);
@@ -64,7 +64,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .post(`${URL_ROOMS}/1/join`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -75,7 +75,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/1/leave`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -105,7 +105,7 @@ describe('Rooms', function () {
         chai
           .request(app)
           .get(URL_ROOMS)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be
@@ -124,7 +124,7 @@ describe('Rooms', function () {
         chai
           .request(app)
           .get(`${URL_ROOMS}/${r._id}`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property('_id');
@@ -141,7 +141,7 @@ describe('Rooms', function () {
         .request(app)
         .post(URL_ROOMS)
         .send(room)
-        .set('x-access-token', token)
+        .set('authorization', 'Bearer ' + token)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.have.property('_id');
@@ -160,7 +160,7 @@ describe('Rooms', function () {
         .request(app)
         .post(URL_ROOMS)
         .send(room)
-        .set('x-access-token', token)
+        .set('authorization', 'Bearer ' + token)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.deep.nested.property('errors[0].name');
@@ -178,7 +178,7 @@ describe('Rooms', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(404);
             res.body.should.have.deep.nested.property('errors[0].resource_not_found');
@@ -198,7 +198,7 @@ describe('Rooms', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(204);
 
@@ -223,7 +223,7 @@ describe('Rooms', function () {
           chai
             .request(app)
             .post(`${URL_ROOMS}/${r._id}/join`)
-            .set('x-access-token', userToJoinToken)
+            .set('authorization', 'Bearer ' + userToJoinToken)
             .end((err, res) => {
               res.should.have.status(201);
               Room.findById(r._id).then(function (foundedRoom) {
@@ -242,7 +242,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .post(`${URL_ROOMS}/${1000}/join`)
-        .set('x-access-token', token)
+        .set('authorization', 'Bearer ' + token)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.deep.nested.property('errors[0].resource_not_found');
@@ -261,7 +261,7 @@ describe('Rooms', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}/leave`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property('_id', r._id.toString());
@@ -275,7 +275,7 @@ describe('Rooms', function () {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/${1000}/leave`)
-        .set('x-access-token', token)
+        .set('authorization', 'Bearer ' + token)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.deep.nested.property('errors[0].resource_not_found');

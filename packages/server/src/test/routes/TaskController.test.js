@@ -19,7 +19,7 @@ describe('Tasks', function () {
       chai
         .request(app)
         .get(`${URL_ROOMS}/123/tasks`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -30,7 +30,7 @@ describe('Tasks', function () {
       chai
         .request(app)
         .post(`${URL_ROOMS}/123/tasks`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -42,7 +42,7 @@ describe('Tasks', function () {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/123/tasks/222`)
-        .set('x-access-token', 'MyToken')
+        .set('authorization', 'Bearer ' + 'MyToken')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.have.deep.nested.property('errors[0].unauthenticated');
@@ -80,7 +80,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .get(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be
@@ -103,7 +103,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .post(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .send({ name: 'Demo Task' })
           .end((err, res) => {
             res.should.have.status(201);
@@ -127,7 +127,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .post(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .send({ name: 'TA' })
           .end((err, res) => {
             res.should.have.status(400);
@@ -147,7 +147,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .post(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .send({ name: 'Demo Task' })
           .end((err, res) => {
             res.should.have.status(403);
@@ -167,7 +167,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(403);
             res.body.should.have.deep.nested.property('errors[0].unauthorized');
@@ -188,7 +188,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(200);
 
@@ -209,7 +209,7 @@ describe('Tasks', function () {
           .request(app)
           .put(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
           .send({ name: 'Edited Task' })
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.should.have.status(403);
             res.body.should.have.deep.nested.property('errors[0].unauthorized');
@@ -231,7 +231,7 @@ describe('Tasks', function () {
           .request(app)
           .put(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
           .send({ name: 'Edited Task' })
-          .set('x-access-token', token)
+          .set('authorization', 'Bearer ' + token)
           .end((err, res) => {
             res.body.should.be
               .an('array')
