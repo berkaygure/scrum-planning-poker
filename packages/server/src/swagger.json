@@ -21,13 +21,11 @@
       "description": "API for Rooms"
     }
   ],
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
     }
   },
   "schemes": ["http"],
@@ -67,7 +65,7 @@
         "parameters": [],
         "produces": ["application/json"],
         "security": {
-          "bearerAuth": []
+          "Bearer": []
         },
         "responses": {
           "200": {
