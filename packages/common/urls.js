@@ -1,4 +1,4 @@
-const BASE = 'http://localhost:8080/api/';
+const BASE = '/api/';
 const URL_REGISTER = `${BASE}register`;
 const URL_LOGIN = `${BASE}login`;
 const URL_GET_USER_BY_ID = `${BASE}users`;
