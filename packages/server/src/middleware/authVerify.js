@@ -2,15 +2,17 @@ var jwt = require('jsonwebtoken');
 const config = require('../config');
 
 const authVerify = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1];
+  const authorization = req.headers.authorization || '';
+
+  const token = authorization.split(' ')[1];
 
   if (!token) {
-    return res.status(401).send({ errors: [{ unauthenticated: 'Unauthorized!' }] });
+    return res.status(401).send({ errors: [{ unauthenticated: 'unauthenticated!' }] });
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).send({ errors: [{ unauthenticated: 'Unauthorized!' }] });
+      return res.status(401).send({ errors: [{ unauthenticated: 'unauthenticated!' }] });
     }
     req.userId = decoded.id;
     next();
