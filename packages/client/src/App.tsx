@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { ChakraProvider, theme } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Room from './pages/Room';
 import OnlyGuestRoute from './components/OnlyGuestRoot';
 import PrivateRoute from './components/PrivateRoute';
+import theme from './theme';
 
 export const App = () => {
   return (
     <ChakraProvider theme={theme}>
-      {/* <ColorModeSwitcher justifySelf="flex-end" /> */}
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <Router>
         <Switch>
           <PrivateRoute path='/dashboard' exact>

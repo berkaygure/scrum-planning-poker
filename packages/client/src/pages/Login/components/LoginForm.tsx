@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
 import { login } from '../../../services/auth';
 import FormWrapper from './FormWrapper';
@@ -31,6 +31,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ altBtnClick, onLoginSuccess }) =>
     }
   };
 
+  const handleEnterKey = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <FormWrapper>
       <Box mb='10'>
@@ -45,19 +51,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ altBtnClick, onLoginSuccess }) =>
       <FormControl id='login_username' isRequired isDisabled={loading}>
         <FormLabel>Username</FormLabel>
         <Input
-          value={name}
-          onChange={(e) => setName(e.target.value.toLowerCase().trim())}
           type='text'
+          value={name}
+          onKeyPress={handleEnterKey}
           placeholder='Enter your Username'
+          onChange={(e) => setName(e.target.value.toLowerCase().trim())}
         />
       </FormControl>
       <FormControl id='login_password' isRequired mt='5' isDisabled={loading}>
         <FormLabel>Password</FormLabel>
         <Input
           value={pwd}
-          onChange={(e) => setPwd(e.target.value.toLowerCase().trim())}
           type='password'
+          onKeyPress={handleEnterKey}
           placeholder='Enter your password'
+          onChange={(e) => setPwd(e.target.value.toLowerCase().trim())}
         />
       </FormControl>
       <Button

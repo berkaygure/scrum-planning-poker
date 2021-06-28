@@ -4,7 +4,7 @@ import { useTransition, animated, config } from 'react-spring';
 import { useHistory, useLocation } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 
-import { ColorModeSwitcher } from '../../components/ColorModeSwitcher';
+// import { ColorModeSwitcher } from '../../components/ColorModeSwitcher';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
@@ -12,8 +12,8 @@ import RegisterForm from './components/RegisterForm';
 const Login = () => {
   const loc = useLocation();
   const { push } = useHistory();
-  const [animate, setAnimate] = useState(true);
   const { setUser } = useLocalStorage();
+  const [animate, setAnimate] = useState(true);
 
   const transitions = useTransition(animate, {
     from: { position: 'absolute', opacity: 0 },
@@ -44,7 +44,7 @@ const Login = () => {
   return (
     <DocumentTitle title={`${animate ? 'Register' : 'Login'} - ${process.env.REACT_APP_APP_NAME}`}>
       <Flex minH='100vh' p={3} flex='1' justifyContent='center'>
-        <ColorModeSwitcher right='5' position='fixed' top='3' />
+        {/* <ColorModeSwitcher right='5' position='fixed' top='3' /> */}
         <Center>
           {transitions(({ opacity }, item) =>
             item ? (

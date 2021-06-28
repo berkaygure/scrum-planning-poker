@@ -7,13 +7,15 @@ class RoomService {
   }
   async findAll() {
     return await Room.find({})
-      .populate('owner', 'name')
-      .populate('users', 'name')
+      .populate('owner', 'username')
+      .populate('users', 'username')
       .sort('-createdAt');
   }
 
   async findById(roomId) {
-    const room = await Room.findById(roomId).populate('owner', 'name').populate('users', 'name');
+    const room = await Room.findById(roomId)
+      .populate('owner', 'username')
+      .populate('users', 'username');
     return room;
   }
 

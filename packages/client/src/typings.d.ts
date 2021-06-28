@@ -1,7 +1,6 @@
 declare interface User {
-  name: string;
-  id: string;
   _id: string;
+  username: string;
   token: string;
 }
 

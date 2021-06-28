@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { KeyboardEvent } from 'react';
 import {
   Box,
   Button,
@@ -9,9 +10,10 @@ import {
   Text,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { register } from '../../../services/auth';
-import FormWrapper from './FormWrapper';
+
 import Alert from '../../../components/Alert';
+import FormWrapper from './FormWrapper';
+import { register } from '../../../services/auth';
 import { parseValidationErrors } from '../../../utils';
 
 interface RegisterFormProps {
@@ -48,16 +50,22 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ altBtnClick, onRegisterSucc
 
   useEffect(() => {
     if (rePwd.length > 0 && rePwd !== pwd) {
-      setError((e) => ({
-        ...e,
+      setError((error) => ({
+        ...error,
         passwordMatch: 'Your passwords does not match',
       }));
     } else {
-      setError((e) => ({
-        apiError: e?.apiError,
+      setError((error) => ({
+        apiError: error?.apiError,
       }));
     }
   }, [pwd, rePwd]);
+
+  const handleEnterKey = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleRegister();
+    }
+  };
 
   return (
     <FormWrapper>
@@ -66,7 +74,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ altBtnClick, onRegisterSucc
           Register
         </Text>
         <Text textAlign='center' fontSize='small'>
-          Please fill all fields
+          Please fill in all fields.
         </Text>
       </Box>
       {error?.apiError &&
@@ -74,19 +82,21 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ altBtnClick, onRegisterSucc
       <FormControl id='register_username' isRequired isDisabled={loading}>
         <FormLabel>Username</FormLabel>
         <Input
-          value={name}
-          onChange={(e) => setName(e.target.value.toLowerCase().trim())}
           type='text'
+          value={name}
+          onKeyPress={handleEnterKey}
           placeholder='Enter your Username'
+          onChange={(e) => setName(e.target.value.toLowerCase().trim())}
         />
       </FormControl>
       <FormControl id='register_password' isRequired mt='5' isDisabled={loading}>
         <FormLabel>Password</FormLabel>
         <Input
           value={pwd}
-          onChange={(e) => setPwd(e.target.value.toLowerCase().trim())}
           type='password'
+          onKeyPress={handleEnterKey}
           placeholder='Please choose a password'
+          onChange={(e) => setPwd(e.target.value.toLowerCase().trim())}
         />
       </FormControl>
       <FormControl

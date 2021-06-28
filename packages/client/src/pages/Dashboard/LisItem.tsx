@@ -37,28 +37,29 @@ interface ListItemProps {
 }
 
 const ListItem: React.FC<ListItemProps> = ({ room, currentUser, onRemove, onLeave, onJoin }) => {
-  const isJoined = useMemo(() => {
-    return room.users.findIndex((x) => x._id === currentUser?.id) > -1;
+  const hasJoined = useMemo(() => {
+    return room.users.findIndex((x) => x._id === currentUser?._id) > -1;
   }, [currentUser, room]);
 
   const isOwner = useMemo(() => {
-    return room.owner._id === currentUser?.id;
+    return room.owner._id === currentUser?._id;
   }, [currentUser, room]);
+
   return (
     <Flex
-      key={room._id}
-      borderBottom='1px'
       pb='5'
       mb='5'
       pr='5'
-      borderBottomColor='gray.600'
       align='center'
+      key={room._id}
+      borderBottom='1px'
+      borderBottomColor='gray.600'
       justifyContent='space-between'
     >
       <Flex flexDirection='column'>
         <Heading
-          as={Link}
           p='0'
+          as={Link}
           to={`/channel/${room._id}`}
           _hover={{ color: 'blue.500', textDecoration: 'underline' }}
         >
@@ -76,7 +77,7 @@ const ListItem: React.FC<ListItemProps> = ({ room, currentUser, onRemove, onLeav
           ⋅
           <IconText
             icon={IoIosPerson}
-            text={room.owner.name}
+            text={room.owner.username}
             textStyle={{ textDecoration: 'underline' }}
           />
           ⋅
@@ -86,22 +87,22 @@ const ListItem: React.FC<ListItemProps> = ({ room, currentUser, onRemove, onLeav
       {isOwner ? (
         <Button
           rounded='md'
-          onClick={() => onRemove(room)}
-          leftIcon={<IoIosTrash />}
           colorScheme='red'
+          leftIcon={<IoIosTrash />}
+          onClick={() => onRemove(room)}
         >
           Remove
         </Button>
-      ) : isJoined ? (
+      ) : hasJoined ? (
         <Button rounded='md' onClick={() => onLeave(room)} leftIcon={<IoIosLogOut />}>
           Leave
         </Button>
       ) : (
         <Button
           rounded='md'
-          onClick={() => onJoin(room)}
-          leftIcon={<IoIosLogIn />}
           colorScheme='orange'
+          leftIcon={<IoIosLogIn />}
+          onClick={() => onJoin(room)}
         >
           Join
         </Button>

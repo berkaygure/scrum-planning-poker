@@ -1,41 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Heading, Button, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, Heading, Button, Icon, Text, Stack } from '@chakra-ui/react';
+import { GiPokerHand } from 'react-icons/gi';
+import { BiImport } from 'react-icons/bi';
+import { IoIosPeople, IoIosShare, IoIosAdd } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 
-import { ColorModeSwitcher } from '../../components/ColorModeSwitcher';
 import { findRoom } from '../../services/room';
-import socketIOClient, { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import NewTask from './NewTask';
 import AttendeeList from './components/AttendeeList';
-import TaskList from './components/TaskList';
 
 const Room = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { id } = useParams<{ id: string }>();
   const [room, setRoom] = useState<Room>();
-  const { user } = useLocalStorage();
-  const [onlineUsers, setOnlineUsers] = useState<{ room: string; userId: string; id: string }[]>(
-    [],
-  );
-  const ws = React.useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
-
-  React.useEffect(() => {
-    ws.current = socketIOClient('http://localhost:8080');
-  }, []);
-
-  React.useEffect(() => {
-    if (ws.current) {
-      ws.current.on('onlineUsers', function (data) {
-        setOnlineUsers(data.users);
-      });
-    }
-  }, [ws]);
-
-  useEffect(() => {
-    ws.current?.emit('joinRoom', { room: room?._id, userId: user?.id });
-  }, [room, user]);
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     (async () => {
@@ -44,67 +19,68 @@ const Room = () => {
     })();
   }, [id]);
 
-  const onNewTaskAdded = (tasks: Task[]) => {
-    setRoom({
-      ...room!,
-      tasks,
-    });
-    onClose();
-  };
-
   return (
-    <Box h='100vh'>
-      <ColorModeSwitcher right='5' position='fixed' top='3' />
-      <Flex mx='auto' p='10' h='full'>
-        <Box flex='1'>
-          <Heading borderBottom='1px' borderColor='gray.600' pb='3'>
-            #{room?.name}
-          </Heading>
-          <Box py='3'>
-            {room && room.owner._id === user?.id && (
-              <Button w='full' colorScheme='blue'>
-                Start
-              </Button>
-            )}
-            {room && room.users.findIndex((x) => x._id === user?.id) === -1 && (
-              <Button w='full' mt='2'>
-                Join
-              </Button>
-            )}
-          </Box>
-          {room && <AttendeeList attendees={room.users} onlineUsers={onlineUsers} />}
-          {room && <TaskList tasks={room.tasks} onOpen={onOpen} />}
+    <Flex h='100vh' w={1200} mx='auto' justifyContent='space-between'>
+      <Box flex={1.2} pos='relative'>
+        <Heading fontSize='2xl' p='4' as='a' display='block' _hover={{ color: 'gray.500' }}>
+          <Icon as={GiPokerHand} fontSize='5xl' />
+          <Text as='span' ml='4'>
+            ScrumPoker
+          </Text>
+        </Heading>
+        <Stack px='5'>
+          <Button w='full' size='sm' colorScheme='blue'>
+            Start
+          </Button>
+          <Box h='1px' w='full' bg='gray.600' />
+          <Button leftIcon={<IoIosAdd />} w='full' size='sm' variant='solid'>
+            Add Task
+          </Button>
+
+          <Button leftIcon={<BiImport />} w='full' size='sm' variant='solid'>
+            Import Tasks
+          </Button>
+        </Stack>
+        <Box px='5' pos='absolute' bottom='5' w='full'>
+          <Button w='full' size='sm' colorScheme='red'>
+            Leave Room
+          </Button>
         </Box>
-        <Box
-          flex='3'
-          h='full'
-          borderLeft='1px'
-          borderRight='1px'
-          borderColor='gray.600'
-          ml='5'
-          px='4'
+        <Box px='5' pt='6'>
+          <Heading fontSize='xl' as='a' display='block' _hover={{ color: 'gray.500' }}>
+            <Text as='span' ml='2'>
+              # Discover Channels
+            </Text>
+          </Heading>
+        </Box>
+      </Box>
+      <Box flex={2.5} borderY='none' borderColor='gray.700' borderWidth='thin'>
+        <Heading
+          fontSize='2xl'
+          p='4'
+          borderBottom='solid'
+          borderBottomColor='gray.700'
+          borderBottomWidth='thin'
         >
-          <Heading>Current Task</Heading>
-          <Box>
-            <Button>10</Button>
-          </Box>
-        </Box>
-        <Box flex='1' ml='5'>
-          <Heading borderBottom='1px' borderColor='gray.600' pb='3'>
-            Score Table
-          </Heading>
-        </Box>
-      </Flex>
-      {room && (
-        <NewTask
-          roomId={room?._id}
-          onFinish={onNewTaskAdded}
-          size='lg'
-          isOpen={isOpen}
-          onClose={onClose}
+          {room?.name}
+        </Heading>
+      </Box>
+      <Box flex={1} pl='5' pt='5'>
+        <Heading fontSize='xl' as='a' display='block' _hover={{ color: 'gray.500' }}>
+          <Icon as={IoIosPeople} fontSize='2xl' />
+          <Text as='span' ml='2'>
+            Attendees
+          </Text>
+        </Heading>
+        <AttendeeList
+          attendees={room?.users || []}
+          onlineUsers={[{ id: '1', room: '1', userId: '1' }]}
         />
-      )}
-    </Box>
+        <Button mt='5' leftIcon={<IoIosShare />} size='sm' w='full' variant='outline'>
+          Invite people
+        </Button>
+      </Box>
+    </Flex>
   );
 };
 
