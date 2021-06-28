@@ -1,7 +1,7 @@
 export const parseValidationErrors = (error?: Record<string, string>[]) => {
   const validationErrors: ValidationError[] = [];
 
-  if (error == undefined) {
+  if (error === undefined) {
     return validationErrors;
   }
 
