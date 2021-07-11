@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
 import { login } from '../../../services/auth';
 import FormWrapper from './FormWrapper';
@@ -85,7 +85,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ altBtnClick, onLoginSuccess }) =>
           variant='link'
           type='button'
         >
-          You don't have an account yet? Click here to register
+          You don&apos;t have an account yet? Click here to register
         </Button>
       </Flex>
     </FormWrapper>

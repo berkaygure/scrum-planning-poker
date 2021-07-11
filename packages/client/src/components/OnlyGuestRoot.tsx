@@ -1,14 +1,14 @@
-import React, { ReactNode } from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import useLocalStorage from '../hooks/useLocalStorage'
+import { ReactNode } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const OnlyGuestRoute: React.FC<{
-  children?: ReactNode
-  path: string
-  redirectTo: string
-  exact: boolean
+  children?: ReactNode;
+  path: string;
+  redirectTo: string;
+  exact: boolean;
 }> = (props) => {
-  const { user } = useLocalStorage()
+  const { user } = useLocalStorage();
 
   return !user ? (
     <Route path={props.path} exact={props.exact}>
@@ -16,6 +16,6 @@ const OnlyGuestRoute: React.FC<{
     </Route>
   ) : (
     <Redirect to={props.redirectTo} />
-  )
-}
-export default OnlyGuestRoute
+  );
+};
+export default OnlyGuestRoute;

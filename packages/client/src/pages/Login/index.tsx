@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Flex, Center } from '@chakra-ui/react';
 import { useTransition, animated, config } from 'react-spring';
 import { useHistory, useLocation } from 'react-router-dom';

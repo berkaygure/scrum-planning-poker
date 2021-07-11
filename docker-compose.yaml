@@ -1,8 +1,8 @@
-version: "3.9"
-services: 
+version: '3.9'
+services:
   mongo:
     image: mongo:latest
-    volumes: 
+    volumes:
       - ./data:/data/db
     ports:
       - 27017:27017
@@ -11,5 +11,5 @@ services:
     image: mongo-express:latest
     links:
       - mongo
-    ports: 
+    ports:
       - 8081:8081

@@ -1,23 +1,21 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
-import axios from 'axios';
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 axios.interceptors.request.use(
-  function (req) {
+  (req) => {
     if (localStorage.session) {
-      const token = (JSON.parse(atob(localStorage.session)) as User).token;
-      req.headers['authorization'] = `bearer ${token}`;
+      const { token } = JSON.parse(atob(localStorage.session)) as User;
+      req.headers.authorization = `bearer ${token}`;
     }
 
     return req;
   },
-  function (error) {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 ReactDOM.render(

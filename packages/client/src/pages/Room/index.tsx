@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Flex, Heading, Button, Icon, Text, Stack } from '@chakra-ui/react';
 import { GiPokerHand } from 'react-icons/gi';
-import { BiImport } from 'react-icons/bi';
 import { IoIosPeople, IoIosShare, IoIosAdd } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
 
@@ -28,30 +27,11 @@ const Room = () => {
             ScrumPoker
           </Text>
         </Heading>
-        <Stack px='5'>
-          <Button w='full' size='sm' colorScheme='blue'>
-            Start
-          </Button>
-          <Box h='1px' w='full' bg='gray.600' />
-          <Button leftIcon={<IoIosAdd />} w='full' size='sm' variant='solid'>
-            Add Task
-          </Button>
 
-          <Button leftIcon={<BiImport />} w='full' size='sm' variant='solid'>
-            Import Tasks
-          </Button>
-        </Stack>
         <Box px='5' pos='absolute' bottom='5' w='full'>
           <Button w='full' size='sm' colorScheme='red'>
             Leave Room
           </Button>
-        </Box>
-        <Box px='5' pt='6'>
-          <Heading fontSize='xl' as='a' display='block' _hover={{ color: 'gray.500' }}>
-            <Text as='span' ml='2'>
-              # Discover Channels
-            </Text>
-          </Heading>
         </Box>
       </Box>
       <Box flex={2.5} borderY='none' borderColor='gray.700' borderWidth='thin'>

@@ -13,7 +13,7 @@ module.exports = function (app, mongoose, express) {
   });
 
   const database = mongoose.connection;
-  database.on('error', function (e) {
-    console.error('database connection error:' + e);
+  database.on('error', (e) => {
+    console.error(`database connection error:${e}`);
   });
 };

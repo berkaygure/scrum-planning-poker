@@ -1,10 +1,11 @@
-const Room = require('../models/Room');
 const mongoose = require('mongoose');
+const Room = require('../models/Room');
 
 class RoomService {
   constructor() {
     this.findById = this.findById.bind(this);
   }
+
   async findAll() {
     return await Room.find({})
       .populate('owner', 'username')
@@ -49,7 +50,7 @@ class RoomService {
 
   async create(ownerId, name) {
     const room = new Room({
-      name: name,
+      name,
       owner: mongoose.Types.ObjectId(ownerId),
       users: [mongoose.Types.ObjectId(ownerId)],
     });

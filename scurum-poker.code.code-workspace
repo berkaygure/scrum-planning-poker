@@ -1,10 +1,12 @@
 {
   "folders": [
+
     {
-      "path": "packages/client"
+      "name": "server",
+      "path": "packages/server"
     },
     {
-      "path": "packages/server"
+      "path": "packages/client"
     },
     {
       "name": "root",
@@ -15,5 +17,28 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "pwa-node",
+        "request": "launch",
+        "name": "Server",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "program": "src/index.js",
+        "__workspaceFolder": "."
+      },
+      {
+        "type": "pwa-chrome",
+        "request": "launch",
+        "name": "Client",
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceFolder}/packages/client",
+          "__workspaceFolder": "."
+        }
+    ]
   }
 }

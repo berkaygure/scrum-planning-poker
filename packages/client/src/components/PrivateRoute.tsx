@@ -1,13 +1,13 @@
-import React, { ReactNode } from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import useLocalStorage from '../hooks/useLocalStorage'
+import { ReactNode } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const PrivateRoute: React.FC<{
-  children?: ReactNode
-  path: string
-  exact: boolean
+  children?: ReactNode;
+  path: string;
+  exact: boolean;
 }> = (props) => {
-  const { user } = useLocalStorage()
+  const { user } = useLocalStorage();
 
   return user ? (
     <Route path={props.path} exact={props.exact}>
@@ -15,6 +15,6 @@ const PrivateRoute: React.FC<{
     </Route>
   ) : (
     <Redirect to='/' />
-  )
-}
+  );
+};
 export default PrivateRoute;

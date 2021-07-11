@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box, Flex, Avatar, AvatarBadge, Text } from '@chakra-ui/react';
 
 export interface OnlineUser {
@@ -14,9 +14,7 @@ interface AttendeeListProps {
 
 const AttendeeList: React.FC<AttendeeListProps> = ({ attendees, onlineUsers }) => {
   const isOnline = useMemo(
-    () => (userId: string) => {
-      return onlineUsers.findIndex((x) => x.userId === userId) > -1;
-    },
+    () => (userId: string) => onlineUsers.findIndex((x) => x.userId === userId) > -1,
     [onlineUsers],
   );
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { KeyboardEvent } from 'react';
+import { useEffect, useState, KeyboardEvent } from 'react';
+
 import {
   Box,
   Button,

@@ -1,13 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+// const io = require('socket.io')(http);
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
 const routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
-const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 require('./config/index.js')(app, mongoose, express);
@@ -18,8 +19,10 @@ app.use(routes);
 app.use(errorHandler);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-http.listen(process.env.PORT || 8080, function () {
-  console.log('listening on :' + process.env.PORT);
+const PORT = process.env.PORT || 8080;
+
+http.listen(PORT, () => {
+  console.log(`listening on:${PORT}`);
 });
 
 module.exports = app;

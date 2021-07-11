@@ -1,4 +1,3 @@
-import React from 'react';
 import { Flex, Text, Button } from '@chakra-ui/react';
 import { IoIosLogOut } from 'react-icons/io';
 import { useHistory } from 'react-router-dom';

@@ -1,11 +1,11 @@
-const app = require('../../index.js');
 const chai = require('chai');
-var jwt = require('jsonwebtoken');
-const config = require('../../config');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const chaiHttp = require('chai-http');
-const { URL_REGISTER, URL_LOGIN, URL_ROOMS } = require('@scrum-game/common');
+const { URL_ROOMS } = require('@scrum-game/common');
+const config = require('../../config');
+const app = require('../../index.js');
 const User = require('../../models/User.js');
 const Room = require('../../models/Room.js');
 
@@ -13,9 +13,9 @@ chai.should();
 
 chai.use(chaiHttp);
 
-describe('Rooms', function () {
-  describe('Unauthenticated', function () {
-    it('SHOULD NOT ACCESS ALL ROOM LIST WITHOUT LOGIN', function (done) {
+describe('Rooms', () => {
+  describe('Unauthenticated', () => {
+    it('SHOULD NOT ACCESS ALL ROOM LIST WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .get(URL_ROOMS)
@@ -26,7 +26,7 @@ describe('Rooms', function () {
           done();
         });
     });
-    it('SHOULD NOT ACCESS A ROOM DETAILS WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT ACCESS A ROOM DETAILS WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .get(`${URL_ROOMS}/1`)
@@ -37,7 +37,7 @@ describe('Rooms', function () {
           done();
         });
     });
-    it('SHOULD NOT DELETE A ROOM WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT DELETE A ROOM WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/1`)
@@ -48,7 +48,7 @@ describe('Rooms', function () {
           done();
         });
     });
-    it('SHOULD NOT CREATE A ROOM WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT CREATE A ROOM WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .post(`${URL_ROOMS}`)
@@ -60,7 +60,7 @@ describe('Rooms', function () {
           done();
         });
     });
-    it('SHOULD NOT JOIN A ROOM WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT JOIN A ROOM WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .post(`${URL_ROOMS}/1/join`)
@@ -71,7 +71,7 @@ describe('Rooms', function () {
           done();
         });
     });
-    it('SHOULD NOT JOIN A ROOM WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT LEAVE A ROOM WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/1/leave`)
@@ -84,7 +84,7 @@ describe('Rooms', function () {
     });
   });
 
-  describe('Authenticated', function () {
+  describe('Authenticated', () => {
     let token = '';
     let userId = 0;
     beforeEach((done) => {
@@ -98,14 +98,14 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD LIST ALL ROOMS', function (done) {
+    it('SHOULD LIST ALL ROOMS', (done) => {
       const room = new Room({ name: 'Demo Room' });
 
-      room.save().then((r) => {
+      room.save().then(() => {
         chai
           .request(app)
           .get(URL_ROOMS)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be
@@ -117,14 +117,14 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD RETURN A ROOM', function (done) {
+    it('SHOULD RETURN A ROOM', (done) => {
       const room = new Room({ name: 'My Room' });
 
       room.save().then((r) => {
         chai
           .request(app)
           .get(`${URL_ROOMS}/${r._id}`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property('_id');
@@ -134,56 +134,56 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD CREATE A ROOM', function (done) {
+    it('SHOULD CREATE A ROOM', (done) => {
       const room = { name: 'New room' };
 
       chai
         .request(app)
         .post(URL_ROOMS)
         .send(room)
-        .set('authorization', 'Bearer ' + token)
+        .set('authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.have.property('_id');
           res.body.should.have.property('name', room.name);
-          Room.countDocuments({}, function (err, c) {
+          Room.countDocuments({}, (err, c) => {
             c.should.be.equal(1);
             done();
           });
         });
     });
 
-    it('SHOULD NOT CREATE A ROOM WITH NAME LENGTH LESS THAN 3', function (done) {
+    it('SHOULD NOT CREATE A ROOM WITH NAME LENGTH LESS THAN 3', (done) => {
       const room = { name: 'Ne' };
 
       chai
         .request(app)
         .post(URL_ROOMS)
         .send(room)
-        .set('authorization', 'Bearer ' + token)
+        .set('authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.have.deep.nested.property('errors[0].name');
-          Room.countDocuments({}, function (err, c) {
+          Room.countDocuments({}, (err, c) => {
             c.should.be.equal(0);
             done();
           });
         });
     });
 
-    it('SHOULD NOT REMOVE A ROOM IF THERE IS NO OWNERSHIP', function (done) {
+    it('SHOULD NOT REMOVE A ROOM IF THERE IS NO OWNERSHIP', (done) => {
       const room = new Room({ name: 'My Room' });
 
       room.save().then((r) => {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(404);
             res.body.should.have.deep.nested.property('errors[0].resource_not_found');
 
-            Room.countDocuments({}, function (err, c) {
+            Room.countDocuments({}, (err, c) => {
               c.should.be.equal(1);
               done();
             });
@@ -191,18 +191,18 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD REMOVE A ROOM', function (done) {
+    it('SHOULD REMOVE A ROOM', (done) => {
       const room = new Room({ name: 'My Room', owner: mongoose.Types.ObjectId(userId) });
 
       room.save().then((r) => {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(204);
 
-            Room.countDocuments({}, function (err, c) {
+            Room.countDocuments({}, (err, c) => {
               c.should.be.equal(0);
               done();
             });
@@ -210,7 +210,7 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD JOIN TO THE ROOM', function (done) {
+    it('SHOULD JOIN TO THE ROOM', (done) => {
       const roomToJoined = new Room({ name: 'My Room', owner: mongoose.Types.ObjectId(userId) });
       const userToJoin = new User({ username: 'berkay.gure1', password: '123456' });
 
@@ -223,10 +223,10 @@ describe('Rooms', function () {
           chai
             .request(app)
             .post(`${URL_ROOMS}/${r._id}/join`)
-            .set('authorization', 'Bearer ' + userToJoinToken)
+            .set('authorization', `Bearer ${userToJoinToken}`)
             .end((err, res) => {
               res.should.have.status(201);
-              Room.findById(r._id).then(function (foundedRoom) {
+              Room.findById(r._id).then((foundedRoom) => {
                 foundedRoom.users.should.be
                   .an('array')
                   .that.have.lengthOf(1)
@@ -238,11 +238,11 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD  NOT JOIN TO THE ROOM THAT NOT EXISTS', function (done) {
+    it('SHOULD  NOT JOIN TO THE ROOM THAT NOT EXISTS', (done) => {
       chai
         .request(app)
         .post(`${URL_ROOMS}/${1000}/join`)
-        .set('authorization', 'Bearer ' + token)
+        .set('authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.deep.nested.property('errors[0].resource_not_found');
@@ -250,18 +250,18 @@ describe('Rooms', function () {
         });
     });
 
-    it('SHOULD LEAVE FROM THE CHANNEL', function (done) {
+    it('SHOULD LEAVE FROM THE CHANNEL', (done) => {
       const joinedRoom = new Room({
         name: 'My Room',
         owner: mongoose.Types.ObjectId(userId),
         users: [mongoose.Types.ObjectId(userId)],
       });
 
-      joinedRoom.save().then(function (r) {
+      joinedRoom.save().then((r) => {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}/leave`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property('_id', r._id.toString());
@@ -271,11 +271,11 @@ describe('Rooms', function () {
       });
     });
 
-    it('SHOULD  NOT LEAVE FROM THE ROOM THAT NOT EXISTS', function (done) {
+    it('SHOULD  NOT LEAVE FROM THE ROOM THAT NOT EXISTS', (done) => {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/${1000}/leave`)
-        .set('authorization', 'Bearer ' + token)
+        .set('authorization', `Bearer ${token}`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.deep.nested.property('errors[0].resource_not_found');

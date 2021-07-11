@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -12,24 +12,24 @@ import {
   FormControl,
   Input,
   FormLabel,
-} from "@chakra-ui/react";
-import { PlusSquareIcon } from "@chakra-ui/icons";
-import { createRoom } from "../../services/room";
+} from '@chakra-ui/react';
+import { PlusSquareIcon } from '@chakra-ui/icons';
+import { createRoom } from '../../services/room';
 
-interface NewRoomProps extends Omit<ModalProps, "children"> {
+interface NewRoomProps extends Omit<ModalProps, 'children'> {
   onFinish: (room: Room) => void;
 }
 
-const NewChannel: React.FC<NewRoomProps> = ({onFinish, ...props}) => {
-  const [name, setName] = useState<string>("");
-  
+const NewChannel: React.FC<NewRoomProps> = ({ onFinish, ...props }) => {
+  const [name, setName] = useState<string>('');
+
   const handleNew = async () => {
-    if(name) {
-      const {data} = await createRoom(name);
-      setName('')
+    if (name) {
+      const { data } = await createRoom(name);
+      setName('');
       onFinish(data);
     }
-  }
+  };
 
   return (
     <Modal {...props}>
@@ -38,24 +38,20 @@ const NewChannel: React.FC<NewRoomProps> = ({onFinish, ...props}) => {
         <ModalHeader>New Channel</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl id="register_password" isRequired isDisabled={false}>
+          <FormControl id='register_password' isRequired isDisabled={false}>
             <FormLabel>Channel Name</FormLabel>
             <Input
               value={name}
               autoFocus
               onChange={(e) => setName(e.target.value)}
-              type="text"
-              placeholder="What is you channel name?"
+              type='text'
+              placeholder='What is you channel name?'
             />
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            leftIcon={<PlusSquareIcon />}
-            colorScheme="blue"
-            onClick={handleNew}
-          >
+          <Button leftIcon={<PlusSquareIcon />} colorScheme='blue' onClick={handleNew}>
             Create Channel
           </Button>
         </ModalFooter>

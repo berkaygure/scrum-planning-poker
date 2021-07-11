@@ -13,9 +13,9 @@ chai.should();
 
 chai.use(chaiHttp);
 
-describe('Tasks', function () {
-  describe('Unauthenticated', function () {
-    it('SHOULD NOT ACCESS ALL TASKS LIST WITHOUT LOGIN', function (done) {
+describe('Tasks', () => {
+  describe('Unauthenticated', () => {
+    it('SHOULD NOT ACCESS ALL TASKS LIST WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .get(`${URL_ROOMS}/123/tasks`)
@@ -26,7 +26,7 @@ describe('Tasks', function () {
           done();
         });
     });
-    it('SHOULD NOT ACCESS CREATE TASK WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT ACCESS CREATE TASK WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .post(`${URL_ROOMS}/123/tasks`)
@@ -38,7 +38,7 @@ describe('Tasks', function () {
         });
     });
 
-    it('SHOULD NOT ACCESS DELETE TASK WITHOUT LOGIN', function (done) {
+    it('SHOULD NOT ACCESS DELETE TASK WITHOUT LOGIN', (done) => {
       chai
         .request(app)
         .delete(`${URL_ROOMS}/123/tasks/222`)
@@ -51,7 +51,7 @@ describe('Tasks', function () {
     });
   });
 
-  describe('Authenticated', function () {
+  describe('Authenticated', () => {
     let token = '';
     let userId = 0;
 
@@ -66,7 +66,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD LIST ALL TASKS of THE ROOM', function (done) {
+    it('SHOULD LIST ALL TASKS of THE ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [
@@ -80,7 +80,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .get(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be
@@ -92,7 +92,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD CREATE A TASK FOR A ROOM', function (done) {
+    it('SHOULD CREATE A TASK FOR A ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [],
@@ -103,7 +103,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .post(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .send({ name: 'Demo Task' })
           .end((err, res) => {
             res.should.have.status(201);
@@ -116,7 +116,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD NOT CREATE A TASK WITH NAME LENGTH LESS THAN 3', function (done) {
+    it('SHOULD NOT CREATE A TASK WITH NAME LENGTH LESS THAN 3', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [],
@@ -127,7 +127,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .post(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .send({ name: 'TA' })
           .end((err, res) => {
             res.should.have.status(400);
@@ -137,7 +137,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD NOT CREATE A TASK IF USERS HAS NOT OWNERSHIP THE ROOM', function (done) {
+    it('SHOULD NOT CREATE A TASK IF USERS HAS NOT OWNERSHIP THE ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [],
@@ -147,7 +147,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .post(`${URL_ROOMS}/${r._id}/tasks`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .send({ name: 'Demo Task' })
           .end((err, res) => {
             res.should.have.status(403);
@@ -157,7 +157,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD NOT REMOVE TASK FROM THE ROOM IF USERS HAS NOT OWNERSHIP THE ROOM', function (done) {
+    it('SHOULD NOT REMOVE TASK FROM THE ROOM IF USERS HAS NOT OWNERSHIP THE ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [{ name: 'Demo' }],
@@ -167,7 +167,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(403);
             res.body.should.have.deep.nested.property('errors[0].unauthorized');
@@ -177,7 +177,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD REMOVE TASK FROM THE ROOM', function (done) {
+    it('SHOULD REMOVE TASK FROM THE ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [{ name: 'Demo' }],
@@ -188,7 +188,7 @@ describe('Tasks', function () {
         chai
           .request(app)
           .delete(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(200);
 
@@ -198,7 +198,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD NOT UPDATE TASK FROM THE ROOM IF USERS HAS NOT OWNERSHIP THE ROOM', function (done) {
+    it('SHOULD NOT UPDATE TASK FROM THE ROOM IF USERS HAS NOT OWNERSHIP THE ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [{ name: 'Demo' }],
@@ -209,7 +209,7 @@ describe('Tasks', function () {
           .request(app)
           .put(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
           .send({ name: 'Edited Task' })
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.should.have.status(403);
             res.body.should.have.deep.nested.property('errors[0].unauthorized');
@@ -219,7 +219,7 @@ describe('Tasks', function () {
       });
     });
 
-    it('SHOULD UPDATE TASK OF A ROOM', function (done) {
+    it('SHOULD UPDATE TASK OF A ROOM', (done) => {
       const room = new Room({
         name: 'Demo Room',
         tasks: [{ name: 'Demo' }],
@@ -231,7 +231,7 @@ describe('Tasks', function () {
           .request(app)
           .put(`${URL_ROOMS}/${r._id}/tasks/${r.tasks[0]._id}`)
           .send({ name: 'Edited Task' })
-          .set('authorization', 'Bearer ' + token)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             res.body.should.be
               .an('array')

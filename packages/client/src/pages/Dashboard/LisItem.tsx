@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Flex, Heading, Button, Text, TextProps, Icon } from '@chakra-ui/react';
 import {
   IoIosCalendar,
@@ -17,16 +17,14 @@ interface IconTextProps {
   text: string;
   textStyle?: TextProps;
 }
-const IconText: React.FC<IconTextProps> = ({ icon, text, textStyle }) => {
-  return (
-    <Flex alignItems='center' mr='1' color='gray.400'>
-      <Icon fontSize='sm' mr='1' as={icon} />{' '}
-      <Text fontSize='sm' {...textStyle}>
-        {text}
-      </Text>
-    </Flex>
-  );
-};
+const IconText: React.FC<IconTextProps> = ({ icon, text, textStyle }) => (
+  <Flex alignItems='center' mr='1' color='gray.400'>
+    <Icon fontSize='sm' mr='1' as={icon} />{' '}
+    <Text fontSize='sm' {...textStyle}>
+      {text}
+    </Text>
+  </Flex>
+);
 
 interface ListItemProps {
   room: Room;
@@ -37,13 +35,12 @@ interface ListItemProps {
 }
 
 const ListItem: React.FC<ListItemProps> = ({ room, currentUser, onRemove, onLeave, onJoin }) => {
-  const hasJoined = useMemo(() => {
-    return room.users.findIndex((x) => x._id === currentUser?._id) > -1;
-  }, [currentUser, room]);
+  const hasJoined = useMemo(
+    () => room.users.findIndex((x) => x._id === currentUser?._id) > -1,
+    [currentUser, room],
+  );
 
-  const isOwner = useMemo(() => {
-    return room.owner._id === currentUser?._id;
-  }, [currentUser, room]);
+  const isOwner = useMemo(() => room.owner._id === currentUser?._id, [currentUser, room]);
 
   return (
     <Flex

@@ -6,7 +6,7 @@ export const parseValidationErrors = (error?: Record<string, string>[]) => {
   }
 
   for (const e of error) {
-    Object.entries(e).forEach(function (error) {
+    Object.entries(e).forEach((error) => {
       validationErrors.push({
         field: error[0],
         message: error[1],

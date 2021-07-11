@@ -1,5 +1,4 @@
-'use strict';
-const { body, check } = require('express-validator');
+const { body } = require('express-validator');
 const { URL_LOGIN, URL_GET_USER_BY_ID, URL_REGISTER, URL_ROOMS } = require('@scrum-game/common');
 const router = require('express').Router();
 const AuthController = require('../controllers/AuthController');

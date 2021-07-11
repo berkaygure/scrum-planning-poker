@@ -1,16 +1,16 @@
-const app = require('../../index.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const { URL_REGISTER, URL_LOGIN } = require('@scrum-game/common');
+const app = require('../../index.js');
 const User = require('../../models/User.js');
 
 chai.should();
 
 chai.use(chaiHttp);
 
-describe('Authentication Test', function () {
-  describe('/login', function () {
-    it('SHOULD NOT LOGIN WITH WRONG CREDENTIALS', function (done) {
+describe('Authentication Test', () => {
+  describe('/login', () => {
+    it('SHOULD NOT LOGIN WITH WRONG CREDENTIALS', (done) => {
       const users = { username: 'berkay.gurex', password: '123456' };
       chai
         .request(app)
@@ -22,7 +22,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD LOGIN AND GET TOKEN', function (done) {
+    it('SHOULD LOGIN AND GET TOKEN', (done) => {
       const user = new User({ username: 'berkay.gure1', password: '123456' });
       user.save().then(() => {
         const users = { username: 'berkay.gure1', password: '123456' };
@@ -39,7 +39,7 @@ describe('Authentication Test', function () {
           });
       });
     });
-    it('SHOULD GIVE ERROR WHEN USERNAME IS EMPTY OR UNDEFINED', function (done) {
+    it('SHOULD GIVE ERROR WHEN USERNAME IS EMPTY OR UNDEFINED', (done) => {
       const users = {
         password: '123456',
       };
@@ -53,7 +53,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD GIVE ERROR WHEN PASSWORD IS EMPTY OR UNDEFINED', function (done) {
+    it('SHOULD GIVE ERROR WHEN PASSWORD IS EMPTY OR UNDEFINED', (done) => {
       const users = {
         username: 'b.gure',
         password: '',
@@ -68,7 +68,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD GIVE ERROR WHEN PASSWORD IS LESS THAN 6 CHARACTERS', function (done) {
+    it('SHOULD GIVE ERROR WHEN PASSWORD IS LESS THAN 6 CHARACTERS', (done) => {
       const users = {
         username: 'b.gure',
         password: '12345',
@@ -85,8 +85,8 @@ describe('Authentication Test', function () {
     });
   });
 
-  describe('/register', function () {
-    it('SHOULD REGISTER WITH VALID USERNAME AND PASSWORD', function (done) {
+  describe('/register', () => {
+    it('SHOULD REGISTER WITH VALID USERNAME AND PASSWORD', (done) => {
       const users = {
         username: 'berkay.gure',
         password: '123456',
@@ -101,7 +101,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD NOT REGISTER WITH SAME USERNAME', function (done) {
+    it('SHOULD NOT REGISTER WITH SAME USERNAME', (done) => {
       const users = {
         username: 'berkay.gure',
         password: '123456',
@@ -123,7 +123,7 @@ describe('Authentication Test', function () {
             });
         });
     });
-    it('SHOULD NOT REGISTER WITHOUT USERNAME', function (done) {
+    it('SHOULD NOT REGISTER WITHOUT USERNAME', (done) => {
       const users = {
         username: '',
         password: '123456',
@@ -138,7 +138,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD NOT REGISTER WITH USERNAME LESS THAN 3 CHARACTER', function (done) {
+    it('SHOULD NOT REGISTER WITH USERNAME LESS THAN 3 CHARACTER', (done) => {
       const users = {
         username: 'bg',
         password: '123456',
@@ -153,7 +153,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD NOT REGISTER WITHOUT PASSWORD', function (done) {
+    it('SHOULD NOT REGISTER WITHOUT PASSWORD', (done) => {
       const users = {
         username: 'berkay.gure',
         password: '',
@@ -168,7 +168,7 @@ describe('Authentication Test', function () {
           done();
         });
     });
-    it('SHOULD NOT REGISTER WITH PASSWORD LESS THAN 6 CHARACTERS', function (done) {
+    it('SHOULD NOT REGISTER WITH PASSWORD LESS THAN 6 CHARACTERS', (done) => {
       const users = {
         username: 'bg1',
         password: '12345',

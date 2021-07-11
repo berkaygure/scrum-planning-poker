@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "JWT_SCRET"
-}
+  secret: 'JWT_SCRET',
+};

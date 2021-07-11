@@ -1,5 +1,3 @@
-'use strict';
-
 const socket = require('socket.io');
 
 function handleSocket(server) {
@@ -13,8 +11,8 @@ function handleSocket(server) {
 
   const users = [];
 
-  io.on('connection', function (socket) {
-    socket.on('joinRoom', function ({ userId, room }) {
+  io.on('connection', (socket) => {
+    socket.on('joinRoom', ({ userId, room }) => {
       users.push({ id: socket.id, userId, room });
       socket.join(room);
 

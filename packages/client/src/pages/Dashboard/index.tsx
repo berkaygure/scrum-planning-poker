@@ -1,6 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box, Flex, Heading, Input, Button, Checkbox, useDisclosure } from '@chakra-ui/react';
 
 import ListItem from './LisItem';
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const updateRooms = (roomId: string, newRoom: Room) =>
     setRooms(
-      rooms.map(function updateRoomById(room) {
+      rooms.map((room) => {
         if (room._id === roomId) {
           return newRoom;
         }
@@ -36,15 +36,17 @@ const Dashboard = () => {
       }),
     );
 
-  const filteredRooms = useMemo(() => {
-    return rooms.filter((x) => {
-      const myChannelsFilter =
-        !onlyMyChannel || x.users?.findIndex((u) => u._id === user?._id) > -1;
-      const nameFilter = x.name.toLowerCase().indexOf(query) > -1;
+  const filteredRooms = useMemo(
+    () =>
+      rooms.filter((x) => {
+        const myChannelsFilter =
+          !onlyMyChannel || x.users?.findIndex((u) => u._id === user?._id) > -1;
+        const nameFilter = x.name.toLowerCase().indexOf(query) > -1;
 
-      return nameFilter && myChannelsFilter;
-    });
-  }, [query, rooms, onlyMyChannel, user]);
+        return nameFilter && myChannelsFilter;
+      }),
+    [query, rooms, onlyMyChannel, user],
+  );
 
   const handleDeleteRoom = async () => {
     if (selectedRoom) {
@@ -52,7 +54,10 @@ const Dashboard = () => {
         await deleteRoom(selectedRoom._id);
         setRooms((r) => r.filter((x) => x._id !== selectedRoom._id));
         setSelectedRoom(null);
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+        // TODO
+      }
     }
   };
 

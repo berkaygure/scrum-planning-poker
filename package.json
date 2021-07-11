@@ -9,9 +9,23 @@
   "scripts": {
     "test": "lerna run test",
     "new-version": "lerna version --conventional-commits --yes",
-    "diff": "lerna diff"
+    "diff": "lerna diff",
+    "prettier-check": "prettier --check .",
+    "prettier-fix": "prettier --write .",
+    "lint": "eslint \"packages/**/*.{jsx,tsx,js,ts}\" --quiet",
+    "lint:server": "eslint \"packages/server/**/*.{jsx,tsx,js,ts}\" --quiet",
+    "lint:client": "eslint \"packages/client/**/*.{jsx,tsx,js,ts}\" --quiet"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.3.2"
   }
 }
