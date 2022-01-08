@@ -6,7 +6,8 @@
     "node": true,
     "browser": true,
     "es2021": true,
-    "jest/globals": true
+    "jest/globals": true,
+    "mocha": true
   },
   "extends": [
     "eslint:recommended",
@@ -36,6 +37,15 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "@typescript-eslint/no-var-requires": "off"
-  }
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "no-unused-expressions": 0
+      }
+    }
+  ]
 }

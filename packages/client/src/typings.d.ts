@@ -9,9 +9,9 @@ declare interface Task {
   name: string;
 }
 declare interface Room {
-  _id: string;
+  id: string;
   name: string;
-  users: Omit<User, 'token'>[];
+  players: Omit<User, 'token'>[];
   owner: User;
   createdAt: string;
   tasks: Task[];

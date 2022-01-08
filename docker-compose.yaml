@@ -9,6 +9,8 @@ services:
     restart: unless-stopped
   mongo-client:
     image: mongo-express:latest
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/db
     links:
       - mongo
     ports:

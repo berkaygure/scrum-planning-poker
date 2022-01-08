@@ -1,4 +1,5 @@
-export const parseValidationErrors = (error?: Record<string, string>[]) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const parseValidationErrors = (error?: Record<string, string>[]): any => {
   const validationErrors: ValidationError[] = [];
 
   if (error === undefined) {

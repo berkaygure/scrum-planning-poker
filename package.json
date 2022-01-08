@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "test": "lerna run test",
+    "test:server": "lerna exec yarn test --scope @scrum-game/server",
     "new-version": "lerna version --conventional-commits --yes",
     "diff": "lerna diff",
     "prettier-check": "prettier --check .",

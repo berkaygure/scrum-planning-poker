@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  mongo:
+    container_name: 'mongo-for-testing'
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    tmpfs:
+      - /tmp
